@@ -137,6 +137,8 @@
     }
     if (id === 'exam-prep') renderExamPrep();
     if (id === 'listening') initListening();
+    if (id === 'videos') renderVideoLibrary();
+    else stopEnglishVideo();
     if (id === 'news') renderNewsList();
   }
 
@@ -1419,6 +1421,214 @@
   $('#listenNext').addEventListener('click', () => {
     listenIdx = (listenIdx + 1) % ALL_LISTENING.length;
     drawListening();
+  });
+
+  /* ============================================================
+     VIDEO TIẾNG ANH
+     ============================================================ */
+  const VIDEO_HISTORY_KEY = 'em_video_history_' + session.email;
+  const VIDEO_HISTORY_LIMIT = 8;
+  const VIDEO_LEVELS = ['Tất cả', 'Cơ bản', 'Sơ trung cấp', 'Trung cấp', 'Nâng cao'];
+  let selectedVideoLevel = 'Tất cả';
+  let videoSearchTerm = '';
+
+  function parseYouTubeVideoId(value) {
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+
+    let url;
+    try {
+      const normalized = /^https?:\/\//i.test(trimmed)
+        ? trimmed
+        : `https://${trimmed}`;
+      url = new URL(normalized);
+    } catch (error) {
+      return null;
+    }
+
+    if (!['https:', 'http:'].includes(url.protocol)) return null;
+    const hostname = url.hostname.toLowerCase().replace(/^www\./, '');
+    const allowedHosts = ['youtube.com', 'm.youtube.com', 'music.youtube.com', 'youtu.be'];
+    if (!allowedHosts.includes(hostname)) return null;
+
+    let videoId = '';
+    if (hostname === 'youtu.be') {
+      videoId = url.pathname.split('/').filter(Boolean)[0] || '';
+    } else if (url.pathname === '/watch') {
+      videoId = url.searchParams.get('v') || '';
+    } else {
+      const match = url.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})\/?$/);
+      if (match) videoId = match[1];
+    }
+    return /^[A-Za-z0-9_-]{11}$/.test(videoId) ? videoId : null;
+  }
+
+  function readVideoHistory() {
+    try {
+      const history = JSON.parse(localStorage.getItem(VIDEO_HISTORY_KEY) || '[]');
+      return Array.isArray(history)
+        ? history.filter(item => item && /^[A-Za-z0-9_-]{11}$/.test(item.videoId) &&
+          typeof item.title === 'string' && typeof item.watchedAt === 'string')
+          .slice(0, VIDEO_HISTORY_LIMIT)
+        : [];
+    } catch (error) {
+      $('#videoStatus').textContent = 'Không thể đọc lịch sử video trên thiết bị này.';
+      return [];
+    }
+  }
+
+  function saveVideoHistory(videoId, title) {
+    const history = readVideoHistory().filter(item => item.videoId !== videoId);
+    history.unshift({ videoId, title, watchedAt: new Date().toISOString() });
+    try {
+      localStorage.setItem(VIDEO_HISTORY_KEY, JSON.stringify(history.slice(0, VIDEO_HISTORY_LIMIT)));
+    } catch (error) {
+      $('#videoStatus').textContent = 'Không thể lưu lịch sử video trên thiết bị này.';
+    }
+    renderVideoHistory();
+  }
+
+  function playEnglishVideo(videoId, title) {
+    if (!/^[A-Za-z0-9_-]{11}$/.test(videoId)) {
+      $('#videoStatus').textContent = 'Mã video YouTube không hợp lệ.';
+      return;
+    }
+    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+    $('#englishVideoFrame').src =
+      `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`;
+    $('#englishVideoFrame').title = `Video học tiếng Anh: ${title}`;
+    $('#videoPlayerTitle').textContent = title;
+    $('#openVideoOnYoutube').href = videoUrl;
+    $('#videoPlayerPanel').classList.remove('hidden');
+    $('#videoStatus').textContent =
+      'Video được phát từ YouTube. Phụ đề tiếng Anh tùy thuộc video gốc.';
+    saveVideoHistory(videoId, title);
+  }
+
+  function stopEnglishVideo() {
+    const frame = $('#englishVideoFrame');
+    if (frame && frame.src) frame.src = 'about:blank';
+  }
+
+  function renderVideoLevelChips() {
+    const chips = $('#videoLevelChips');
+    chips.innerHTML = '';
+    VIDEO_LEVELS.forEach(level => {
+      const button = document.createElement('button');
+      button.className = 'chip' + (level === selectedVideoLevel ? ' active' : '');
+      button.type = 'button';
+      button.textContent = level;
+      button.addEventListener('click', () => {
+        selectedVideoLevel = level;
+        renderVideoLibrary();
+      });
+      chips.appendChild(button);
+    });
+  }
+
+  function renderVideoLibrary() {
+    renderVideoLevelChips();
+    const grid = $('#videoGrid');
+    grid.innerHTML = '';
+    const normalizedSearch = normalizeDictionaryText(videoSearchTerm);
+    const sources = ENGLISH_VIDEO_SOURCES.filter(source => {
+      const matchesLevel = selectedVideoLevel === 'Tất cả' ||
+        source.level === selectedVideoLevel;
+      const searchable = normalizeDictionaryText(
+        `${source.name} ${source.topic} ${source.description} ${source.tags.join(' ')}`);
+      return matchesLevel && (!normalizedSearch || searchable.includes(normalizedSearch));
+    });
+
+    if (!sources.length) {
+      const empty = document.createElement('p');
+      empty.className = 'empty video-empty';
+      empty.textContent = 'Không tìm thấy nguồn video phù hợp. Hãy thử từ khóa hoặc trình độ khác.';
+      grid.appendChild(empty);
+      return;
+    }
+
+    sources.forEach(source => {
+      const card = document.createElement('article');
+      card.className = 'video-card';
+      const visual = document.createElement('div');
+      visual.className = 'video-card-visual';
+      visual.setAttribute('aria-hidden', 'true');
+      visual.textContent = '▶';
+      const body = document.createElement('div');
+      body.className = 'video-card-body';
+      const level = document.createElement('span');
+      level.className = 'video-level';
+      level.textContent = source.level;
+      const topic = document.createElement('h3');
+      topic.textContent = source.topic;
+      const sourceName = document.createElement('p');
+      sourceName.className = 'video-source-name';
+      sourceName.textContent = source.name;
+      const description = document.createElement('p');
+      description.className = 'video-description';
+      description.textContent = source.description;
+      const button = document.createElement('button');
+      button.className = 'btn btn-outline btn-sm';
+      button.type = 'button';
+      button.textContent = 'Tìm video trên YouTube ↗';
+      button.addEventListener('click', () => {
+        const query = encodeURIComponent(source.query);
+        const searchUrl = `https://www.youtube.com/results?search_query=${query}`;
+        const searchLink = document.createElement('a');
+        searchLink.href = searchUrl;
+        searchLink.target = '_blank';
+        searchLink.rel = 'noopener noreferrer';
+        searchLink.click();
+        $('#videoStatus').textContent =
+          'Đã yêu cầu mở kết quả YouTube trong tab mới. Dán link video muốn xem vào ô phía trên để phát tại đây.';
+      });
+      body.append(level, topic, sourceName, description, button);
+      card.append(visual, body);
+      grid.appendChild(card);
+    });
+  }
+
+  function renderVideoHistory() {
+    const historyContainer = $('#videoHistory');
+    historyContainer.innerHTML = '';
+    const history = readVideoHistory();
+    if (!history.length) {
+      const empty = document.createElement('p');
+      empty.className = 'video-history-empty';
+      empty.textContent = 'Video YouTube bạn đã mở tại đây sẽ xuất hiện ở đây.';
+      historyContainer.appendChild(empty);
+      return;
+    }
+
+    history.forEach(item => {
+      const button = document.createElement('button');
+      button.className = 'video-history-item';
+      button.type = 'button';
+      const title = document.createElement('strong');
+      title.textContent = item.title;
+      const date = document.createElement('span');
+      date.textContent = new Date(item.watchedAt).toLocaleDateString('vi-VN');
+      button.append(title, date);
+      button.addEventListener('click', () => playEnglishVideo(item.videoId, item.title));
+      historyContainer.appendChild(button);
+    });
+  }
+
+  $('#videoSearch').addEventListener('input', event => {
+    videoSearchTerm = event.target.value.trim();
+    renderVideoLibrary();
+  });
+  $('#videoPlayerForm').addEventListener('submit', event => {
+    event.preventDefault();
+    const videoId = parseYouTubeVideoId($('#videoUrlInput').value);
+    if (!videoId) {
+      $('#videoStatus').textContent =
+        'Link chưa đúng. Hãy dán link video YouTube dạng youtube.com/watch?v=... hoặc youtu.be/...';
+      $('#videoUrlInput').focus();
+      return;
+    }
+    $('#videoUrlInput').value = '';
+    playEnglishVideo(videoId, `Video YouTube · ${videoId}`);
   });
 
   /* ============================================================

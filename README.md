@@ -25,9 +25,11 @@ Web học tiếng Anh viết bằng **HTML + CSS + JavaScript thuần** (không 
 | **Luyện thi** | TOEIC, IELTS, VSTEP với luyện nghe, đọc, nói, viết; bài nghe/đọc có chấm điểm, bài nói/viết có checklist tự đánh giá |
 | **Thi đấu** | Tạo thử thách 8 câu bằng link, gửi bạn bè và nhập link kết quả để so điểm |
 | **Nghe** | **600 câu** nghe, chọn nghĩa tiếng Việt đúng |
+| **Video** | Tìm nguồn video học theo chủ đề/trình độ, xem video YouTube nhúng bằng link và mở lại video gần đây |
 | **Đọc báo** | **12 bài báo** tiếng Anh thật, có từ vựng chú thích, nghe từng đoạn và câu hỏi đọc hiểu |
 
 - 🔊 Phát âm dùng Web Speech API (giọng đọc sẵn có của trình duyệt)
+- 🎬 Video dùng trình phát nhúng YouTube; người học có thể tìm nguồn gợi ý hoặc dán link video mình chọn. Cần có kết nối Internet, quyền nhúng phụ thuộc cài đặt của video và YouTube.
 - 🎓 Bài luyện chứng chỉ là tài liệu tham khảo do ứng dụng cung cấp, không phải đề thi chính thức; phần nói/viết không được chấm tự động
 - 💬 Chatbot hỗ trợ tra từ vựng, giải thích một số chủ điểm ngữ pháp và hướng dẫn sử dụng các mục học (chạy offline, không cần API key)
 - 📱 Giao diện responsive, dùng được trên điện thoại
@@ -52,7 +54,7 @@ Web học tiếng Anh viết bằng **HTML + CSS + JavaScript thuần** (không 
 
 ```
 web-LEARNENGLISH/
-├── index.html            # Trang học chính (dashboard + từ vựng + tra cứu + flashcard + quiz + nghe + đọc báo)
+├── index.html            # Trang học chính (dashboard + từ vựng + tra cứu + video + luyện thi + quiz + nghe + đọc báo)
 ├── auth.html             # Trang đăng nhập / đăng ký
 ├── README.md             # Tài liệu này
 ├── css/
@@ -60,6 +62,7 @@ web-LEARNENGLISH/
 ├── js/
 │   ├── data.js           # Dữ liệu cơ bản: chủ đề, 36 từ, câu nghe mẫu
 │   ├── exam-data.js      # Bài luyện tham khảo TOEIC / IELTS / VSTEP
+│   ├── video-data.js     # Nguồn và chủ đề tìm video tiếng Anh
 │   ├── vocab-advanced.js # ⚙️ SINH TỰ ĐỘNG — 1.223 từ nâng cao, 23 chủ đề
 │   ├── listening-data.js # ⚙️ SINH TỰ ĐỘNG — 600 câu luyện nghe
 │   ├── news-data.js      # Bài đọc báo (viết tay)

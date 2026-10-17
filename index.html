@@ -28,6 +28,7 @@
         <a href="#exam-prep" class="nav-link" data-section="exam-prep">Luyện thi</a>
         <a href="#duel" class="nav-link" data-section="duel">Thi đấu</a>
         <a href="#listening" class="nav-link" data-section="listening">Nghe</a>
+        <a href="#videos" class="nav-link" data-section="videos">Video</a>
         <a href="#news" class="nav-link" data-section="news">Đọc báo</a>
       </nav>
 
@@ -335,6 +336,51 @@
       </div>
     </section>
 
+    <!-- ================= ENGLISH VIDEOS ================= -->
+    <section class="section" id="section-videos">
+      <h2 class="section-title">🎬 Video tiếng Anh</h2>
+      <p class="section-sub">Tìm video theo chủ đề và trình độ, hoặc dán link YouTube để xem ngay tại đây.</p>
+
+      <form class="video-player-form" id="videoPlayerForm">
+        <label class="sr-only" for="videoUrlInput">Link video YouTube</label>
+        <input class="input" id="videoUrlInput" type="url"
+          placeholder="Dán link YouTube, ví dụ: youtube.com/watch?v=..." autocomplete="url" />
+        <button class="btn btn-primary" type="submit">Xem video</button>
+      </form>
+      <p class="video-status" id="videoStatus" role="status" aria-live="polite">
+        Chọn gợi ý để tìm video trên YouTube, sau đó dán link video vào đây để xem.
+      </p>
+
+      <div class="video-player-panel hidden" id="videoPlayerPanel">
+        <div class="video-frame-wrap">
+          <iframe id="englishVideoFrame" title="Video học tiếng Anh"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
+        <div class="video-player-info">
+          <h3 id="videoPlayerTitle"></h3>
+          <a class="btn btn-ghost btn-sm" id="openVideoOnYoutube" href="#" target="_blank" rel="noopener noreferrer">Mở trên YouTube ↗</a>
+        </div>
+      </div>
+
+      <div class="video-library-head">
+        <div>
+          <h3>Gợi ý nguồn học</h3>
+          <p class="section-sub">Chọn nguồn và chủ đề để tìm video phù hợp trên YouTube.</p>
+        </div>
+        <input type="search" id="videoSearch" class="input search-input"
+          placeholder="Tìm chủ đề hoặc nguồn video..." />
+      </div>
+      <div class="chips" id="videoLevelChips" aria-label="Lọc theo trình độ"></div>
+      <div class="video-grid" id="videoGrid"></div>
+
+      <div class="video-history-wrap">
+        <h3 class="video-history-title">🕘 Video đã xem gần đây</h3>
+        <div class="video-history" id="videoHistory"></div>
+      </div>
+    </section>
+
     <!-- ================= NEWS / READING ================= -->
     <section class="section" id="section-news">
       <div class="section-head">
@@ -426,6 +472,7 @@
   <script src="js/listening-data.js"></script>
   <script src="js/news-data.js"></script>
   <script src="js/exam-data.js"></script>
+  <script src="js/video-data.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
