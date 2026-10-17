@@ -19,6 +19,7 @@
   }
 
   const USERS_KEY = 'em_users';
+  const GUEST_STATS_KEY = 'em_guest_stats';
 
   /* ---------------- Gộp dữ liệu (cơ bản + nâng cao) ---------------- */
   // TOPICS/VOCABULARY/LISTENING đến từ data.js;
@@ -72,10 +73,15 @@
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   }
 
+  function loadGuestStats() {
+    try { return JSON.parse(localStorage.getItem(GUEST_STATS_KEY) || '{}'); }
+    catch (e) { return {}; }
+  }
+
   /* ---------------- Thống kê người dùng ---------------- */
   function stats() {
     const users = loadUsers();
-    const me = users[session.email];
+    const me = session.guest ? loadGuestStats() : users[session.email];
     return {
       learned: (me && me.learned) || 0,
       points: (me && me.points) || 0,
@@ -86,6 +92,16 @@
   }
 
   function updateStats(patch) {
+    if (session.guest) {
+      const guestStats = loadGuestStats();
+      Object.keys(patch).forEach(k => {
+        guestStats[k] = patch[k] === null ? guestStats[k] : (guestStats[k] || 0) + patch[k];
+      });
+      localStorage.setItem(GUEST_STATS_KEY, JSON.stringify(guestStats));
+      renderStats();
+      return;
+    }
+
     const users = loadUsers();
     const me = users[session.email] || {};
     Object.keys(patch).forEach(k => {

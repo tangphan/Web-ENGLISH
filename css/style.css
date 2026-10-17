@@ -1060,6 +1060,34 @@ a { color: inherit; text-decoration: none; }
 }
 .auth-tab.active { background: #fff; color: var(--primary); box-shadow: 0 3px 10px rgba(31,34,55,.1); }
 
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 17px 0;
+  color: var(--muted);
+  font-size: .8rem;
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.btn-guest {
+  padding: 12px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.btn-guest:hover { background: #f7f7fc; border-color: var(--primary); }
+.guest-note { margin-top: 9px; color: var(--muted); font-size: .78rem; text-align: center; }
+
 .auth-form { display: none; animation: fadeUp .35s ease; }
 .auth-form.active { display: block; }
 .auth-form h3 { font-size: 1.35rem; margin-bottom: 6px; }

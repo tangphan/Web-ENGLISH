@@ -7,11 +7,12 @@ Web học tiếng Anh viết bằng **HTML + CSS + JavaScript thuần** (không 
 ### 🔐 Xác thực người dùng
 - Đăng ký tài khoản (họ tên, email, mật khẩu, xác nhận mật khẩu)
 - Đăng nhập / đăng xuất
+- Tiếp tục với tư cách khách, không cần tạo tài khoản; tiến độ khách được lưu riêng trên trình duyệt hiện tại
 - Kiểm tra hợp lệ: email đúng định dạng, mật khẩu ≥ 6 ký tự, mật khẩu nhập lại khớp, đồng ý điều khoản
 - Thanh đo độ mạnh mật khẩu
 - Hiện/ẩn mật khẩu (👁)
 - "Ghi nhớ đăng nhập" tự điền email lần sau
-- Chặn truy cập trang học nếu chưa đăng nhập (tự chuyển về trang đăng nhập)
+- Chặn truy cập trang học nếu chưa có phiên đăng nhập hoặc phiên khách (tự chuyển về trang đăng nhập)
 - Dữ liệu lưu trong `localStorage` của trình duyệt
 
 ### 📚 Khu vực học tập
@@ -90,7 +91,7 @@ Sau đó mở `http://localhost:8080`.
 
 ## 📖 Hướng dẫn dùng
 
-1. Mở `auth.html` → chọn tab **Đăng ký** → điền thông tin → tạo tài khoản.
+1. Mở `auth.html` → chọn **Đăng ký** để tạo tài khoản, hoặc **Tiếp tục với tư cách khách** để vào học ngay.
 2. Tự động chuyển sang trang học. Bắt đầu từ **Flashcard** hoặc **Từ vựng**.
 3. Làm **Kiểm tra** và **Nghe** để cộng điểm, theo dõi tiến độ ở **Trang chủ**.
 4. Vào **Thi đấu** → tạo thử thách → sao chép link gửi cho bạn. Mỗi người mở link và làm cùng bộ câu hỏi; sau đó chia sẻ link kết quả để đối phương nhập vào và so sánh điểm. Nếu bằng điểm, người hoàn thành nhanh hơn xếp trên.

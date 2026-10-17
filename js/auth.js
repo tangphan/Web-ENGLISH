@@ -126,6 +126,16 @@
     setTimeout(() => { window.location.href = 'index.html' + DUEL_HASH; }, 900);
   });
 
+  $('#guestLoginBtn').addEventListener('click', () => {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      email: 'guest@local',
+      name: 'Khách',
+      guest: true,
+    }));
+    toast('Đang vào với tư cách khách...', 'ok');
+    setTimeout(() => { window.location.href = 'index.html' + DUEL_HASH; }, 500);
+  });
+
   /* ---------------- ĐĂNG KÝ ---------------- */
   $('#registerForm').addEventListener('submit', (e) => {
     e.preventDefault();
