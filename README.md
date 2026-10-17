@@ -28,12 +28,15 @@ Web học tiếng Anh viết bằng **HTML + CSS + JavaScript thuần** (không 
 | **Nghe** | **600 câu** nghe, chọn nghĩa tiếng Việt đúng |
 | **Video** | Tìm nguồn video học theo chủ đề/trình độ, xem video YouTube nhúng bằng link và mở lại video gần đây |
 | **Đọc báo** | **12 bài báo** tiếng Anh thật, có từ vựng chú thích, nghe từng đoạn và câu hỏi đọc hiểu |
+| **Đánh giá** | Gửi đánh giá từ 1–5 sao kèm bình luận và xem phản hồi đã gửi trên trình duyệt |
 
 - 🔊 Phát âm dùng Web Speech API (giọng đọc sẵn có của trình duyệt)
 - 🎬 Video dùng trình phát nhúng YouTube; người học có thể tìm nguồn gợi ý hoặc dán link video mình chọn. Cần có kết nối Internet, quyền nhúng phụ thuộc cài đặt của video và YouTube.
 - 🎓 Bài luyện chứng chỉ là tài liệu tham khảo do ứng dụng cung cấp, không phải đề thi chính thức; phần nói/viết không được chấm tự động
 - 💬 Chatbot hỗ trợ tra từ vựng, giải thích một số chủ điểm ngữ pháp và hướng dẫn sử dụng các mục học (chạy offline, không cần API key)
 - 📱 Giao diện responsive, dùng được trên điện thoại
+- ⭐ Đánh giá và bình luận được lưu cục bộ trong trình duyệt, chưa đồng bộ giữa các thiết bị
+- ⭐ Điểm tổng kết hiển thị trung bình sao từ các đánh giá trên trình duyệt hiện tại
 
 ### 📰 Trang Đọc báo — nội dung
 - 12 bài theo chủ đề: Công nghệ, Môi trường, Kinh tế, Sức khỏe, Giáo dục, Khoa học, Xã hội, Kinh doanh, Thể thao, Chính trị, Nghệ thuật, Giao thông

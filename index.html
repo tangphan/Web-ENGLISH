@@ -30,6 +30,7 @@
         <a href="#listening" class="nav-link" data-section="listening">Nghe</a>
         <a href="#videos" class="nav-link" data-section="videos">Video</a>
         <a href="#news" class="nav-link" data-section="news">Đọc báo</a>
+        <a href="#feedback" class="nav-link" data-section="feedback">Đánh giá</a>
       </nav>
 
       <div class="nav-user">
@@ -426,6 +427,53 @@
           <div class="reader-quiz" id="rdQuiz"></div>
           <div class="quiz-feedback" id="rdFeedback"></div>
         </article>
+      </div>
+    </section>
+
+    <!-- ================= FEEDBACK ================= -->
+    <section class="section" id="section-feedback">
+      <h2 class="section-title">⭐ Đánh giá ứng dụng</h2>
+      <p class="section-sub">Chia sẻ cảm nhận của bạn để giúp TANGLANGUAGE ngày càng tốt hơn.</p>
+
+      <div class="feedback-layout">
+        <form class="feedback-form" id="feedbackForm">
+          <h3>Gửi đánh giá của bạn</h3>
+          <fieldset class="feedback-rating">
+            <legend>Bạn đánh giá ứng dụng bao nhiêu sao?</legend>
+            <div class="feedback-stars" role="radiogroup" aria-label="Đánh giá từ 1 đến 5 sao">
+              <label class="feedback-star">
+                <input type="radio" name="feedbackRating" value="1" required />
+                <span aria-hidden="true">★</span><span class="sr-only">1 sao</span>
+              </label>
+              <label class="feedback-star">
+                <input type="radio" name="feedbackRating" value="2" />
+                <span aria-hidden="true">★</span><span class="sr-only">2 sao</span>
+              </label>
+              <label class="feedback-star">
+                <input type="radio" name="feedbackRating" value="3" />
+                <span aria-hidden="true">★</span><span class="sr-only">3 sao</span>
+              </label>
+              <label class="feedback-star">
+                <input type="radio" name="feedbackRating" value="4" />
+                <span aria-hidden="true">★</span><span class="sr-only">4 sao</span>
+              </label>
+              <label class="feedback-star">
+                <input type="radio" name="feedbackRating" value="5" />
+                <span aria-hidden="true">★</span><span class="sr-only">5 sao</span>
+              </label>
+            </div>
+          </fieldset>
+          <label class="feedback-comment-label" for="feedbackComment">Bình luận</label>
+          <textarea class="input feedback-comment" id="feedbackComment" maxlength="1000" rows="5"
+            placeholder="Điều gì bạn thích hoặc muốn cải thiện?" required></textarea>
+          <small class="feedback-hint">Tối đa 1.000 ký tự.</small>
+          <button class="btn btn-primary" type="submit">Gửi đánh giá</button>
+        </form>
+
+        <div class="feedback-list-panel">
+          <div class="feedback-summary" id="feedbackSummary" aria-live="polite"></div>
+          <div class="feedback-list" id="feedbackList" aria-live="polite"></div>
+        </div>
       </div>
     </section>
 

@@ -20,6 +20,7 @@
 
   const USERS_KEY = 'em_users';
   const GUEST_STATS_KEY = 'em_guest_stats';
+  const FEEDBACK_KEY = 'em_feedback';
 
   /* ---------------- Gộp dữ liệu (cơ bản + nâng cao) ---------------- */
   // TOPICS/VOCABULARY/LISTENING đến từ data.js;
@@ -2009,6 +2010,104 @@
   });
 
   /* ============================================================
+     ĐÁNH GIÁ ỨNG DỤNG
+     ============================================================ */
+  function loadFeedback() {
+    try {
+      const feedback = JSON.parse(localStorage.getItem(FEEDBACK_KEY) || '[]');
+      return Array.isArray(feedback)
+        ? feedback.filter(item =>
+          item && typeof item.name === 'string' &&
+          Number.isInteger(item.rating) && item.rating >= 1 && item.rating <= 5 &&
+          typeof item.comment === 'string' && typeof item.createdAt === 'string')
+        : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function renderFeedback() {
+    const feedback = loadFeedback();
+    const summary = $('#feedbackSummary');
+    const list = $('#feedbackList');
+
+    if (feedback.length === 0) {
+      summary.textContent = 'Chưa có đánh giá nào.';
+      list.innerHTML = '<p class="feedback-empty">Hãy là người đầu tiên chia sẻ cảm nhận!</p>';
+      return;
+    }
+
+    const average = feedback.reduce((total, item) => total + item.rating, 0) / feedback.length;
+    const roundedAverage = Math.round(average);
+    summary.innerHTML = `<strong>${average.toFixed(1)}</strong><span class="feedback-summary-stars" aria-label="${average.toFixed(1)} trên 5 sao">${'★'.repeat(roundedAverage)}${'☆'.repeat(5 - roundedAverage)}</span><span>${feedback.length} đánh giá</span>`;
+    list.replaceChildren();
+    feedback.forEach(item => {
+      const card = document.createElement('article');
+      card.className = 'feedback-item';
+
+      const header = document.createElement('div');
+      header.className = 'feedback-item-header';
+      const name = document.createElement('strong');
+      name.textContent = item.name;
+      const date = document.createElement('time');
+      date.dateTime = item.createdAt;
+      date.textContent = new Date(item.createdAt).toLocaleDateString('vi-VN');
+      header.append(name, date);
+
+      const stars = document.createElement('div');
+      stars.className = 'feedback-item-stars';
+      stars.setAttribute('aria-label', `${item.rating} trên 5 sao`);
+      stars.textContent = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+
+      const comment = document.createElement('p');
+      comment.textContent = item.comment;
+      card.append(header, stars, comment);
+      list.appendChild(card);
+    });
+  }
+
+  $$('#section-feedback input[name="feedbackRating"]').forEach(input => {
+    input.addEventListener('change', () => {
+      const selected = Number(input.value);
+      $$('.feedback-star').forEach(star => {
+        star.classList.toggle('selected', Number(star.querySelector('input').value) <= selected);
+      });
+    });
+  });
+
+  $('#feedbackComment').addEventListener('input', event => {
+    event.currentTarget.setCustomValidity('');
+  });
+
+  $('#feedbackForm').addEventListener('submit', event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+
+    const rating = Number(form.elements.feedbackRating.value);
+    const comment = $('#feedbackComment').value.trim();
+    if (!comment) {
+      $('#feedbackComment').setCustomValidity('Vui lòng nhập bình luận.');
+      $('#feedbackComment').reportValidity();
+      return;
+    }
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) return;
+
+    const feedback = loadFeedback();
+    feedback.unshift({
+      name: session.name || 'Học viên',
+      rating,
+      comment,
+      createdAt: new Date().toISOString(),
+    });
+    localStorage.setItem(FEEDBACK_KEY, JSON.stringify(feedback.slice(0, 100)));
+    form.reset();
+    $$('.feedback-star').forEach(star => star.classList.remove('selected'));
+    renderFeedback();
+    toast('Cảm ơn bạn đã gửi đánh giá!', 'ok');
+  });
+
+  /* ============================================================
      ĐĂNG XUẤT
      ============================================================ */
   $('#logoutBtn').addEventListener('click', () => {
@@ -2028,6 +2127,7 @@
   renderVocab();
   renderNewsChips();
   initChatbot();
+  renderFeedback();
   loadDuelFromAddress();
 
 })();
