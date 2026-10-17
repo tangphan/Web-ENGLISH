@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TANGLANGUAGE — Đăng nhập / Đăng ký</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="auth-body">
+
+  <div class="auth-wrap">
+
+    <!-- LEFT: brand panel -->
+    <aside class="auth-brand">
+      <div class="brand-logo">
+        <span class="logo-icon">🌐</span>
+        <span class="logo-text">TANG<em>LANGUAGE</em></span>
+      </div>
+      <h2>Học tiếng Anh<br />thông minh &amp; hiệu quả</h2>
+      <ul class="brand-list">
+        <li>📚 Hơn 120 từ vựng theo chủ đề</li>
+        <li>🃏 Flashcard lật thẻ ghi nhớ nhanh</li>
+        <li>🎯 Trắc nghiệm củng cố kiến thức</li>
+        <li>🎧 Luyện nghe với giọng đọc chuẩn</li>
+        <li>🏆 Theo dõi điểm &amp; tiến độ mỗi ngày</li>
+      </ul>
+      <p class="brand-foot">Miễn phí — Không cần cài đặt — Dùng ngay trên trình duyệt.</p>
+    </aside>
+
+    <!-- RIGHT: form panel -->
+    <main class="auth-panel">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin">Đăng nhập</button>
+        <button class="auth-tab" id="tabRegister">Đăng ký</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form class="auth-form active" id="loginForm" novalidate>
+        <h3>Chào mừng trở lại 👋</h3>
+        <p class="auth-sub">Đăng nhập để tiếp tục việc học của bạn.</p>
+
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="loginEmail" class="input" placeholder="ten@email.com" autocomplete="email" />
+          <small class="err" data-err="loginEmail"></small>
+        </label>
+
+        <label class="field">
+          <span>Mật khẩu</span>
+          <div class="pw-wrap">
+            <input type="password" id="loginPassword" class="input" placeholder="••••••••"
+              autocomplete="current-password" />
+            <button type="button" class="pw-toggle" data-target="loginPassword">👁</button>
+          </div>
+          <small class="err" data-err="loginPassword"></small>
+        </label>
+
+        <div class="auth-row">
+          <label class="check"><input type="checkbox" id="rememberMe" /> <span>Ghi nhớ đăng nhập</span></label>
+          <a href="#" class="link" id="forgotLink">Quên mật khẩu?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+        <p class="auth-switch">Chưa có tài khoản? <a href="#" id="goRegister">Đăng ký ngay</a></p>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form class="auth-form" id="registerForm" novalidate>
+        <h3>Tạo tài khoản mới ✨</h3>
+        <p class="auth-sub">Chỉ mất vài giây để bắt đầu học.</p>
+
+        <label class="field">
+          <span>Họ và tên</span>
+          <input type="text" id="regName" class="input" placeholder="Nguyễn Văn A" autocomplete="name" />
+          <small class="err" data-err="regName"></small>
+        </label>
+
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="regEmail" class="input" placeholder="ten@email.com" autocomplete="email" />
+          <small class="err" data-err="regEmail"></small>
+        </label>
+
+        <label class="field">
+          <span>Mật khẩu</span>
+          <div class="pw-wrap">
+            <input type="password" id="regPassword" class="input" placeholder="Ít nhất 6 ký tự"
+              autocomplete="new-password" />
+            <button type="button" class="pw-toggle" data-target="regPassword">👁</button>
+          </div>
+          <div class="pw-meter">
+            <div class="pw-meter-fill" id="pwMeter"></div>
+          </div>
+          <small class="err" data-err="regPassword"></small>
+        </label>
+
+        <label class="field">
+          <span>Nhập lại mật khẩu</span>
+          <input type="password" id="regConfirm" class="input" placeholder="Nhập lại mật khẩu"
+            autocomplete="new-password" />
+          <small class="err" data-err="regConfirm"></small>
+        </label>
+
+        <label class="check"><input type="checkbox" id="agree" /> <span>Tôi đồng ý với điều khoản sử dụng</span></label>
+        <small class="err" data-err="agree"></small>
+
+        <button type="submit" class="btn btn-primary btn-block">Tạo tài khoản</button>
+        <p class="auth-switch">Đã có tài khoản? <a href="#" id="goLogin">Đăng nhập</a></p>
+      </form>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/auth.js"></script>
+</body>
+
+</html>

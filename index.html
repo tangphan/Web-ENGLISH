@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TANGLANGUAGE - Học Tiếng Anh Online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="app-body">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">🌐</span>
+        <span class="logo-text">TANG<em>LANGUAGE</em></span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#dashboard" class="nav-link active" data-section="dashboard">Trang chủ</a>
+        <a href="#vocabulary" class="nav-link" data-section="vocabulary">Từ vựng</a>
+        <a href="#dictionary" class="nav-link" data-section="dictionary">Tra cứu</a>
+        <a href="#flashcard" class="nav-link" data-section="flashcard">Flashcard</a>
+        <a href="#quiz" class="nav-link" data-section="quiz">Kiểm tra</a>
+        <a href="#exam-prep" class="nav-link" data-section="exam-prep">Luyện thi</a>
+        <a href="#duel" class="nav-link" data-section="duel">Thi đấu</a>
+        <a href="#listening" class="nav-link" data-section="listening">Nghe</a>
+        <a href="#news" class="nav-link" data-section="news">Đọc báo</a>
+      </nav>
+
+      <div class="nav-user">
+        <div class="user-chip" id="userChip" title="Tài khoản của bạn">
+          <span class="user-avatar" id="userAvatar">A</span>
+          <span class="user-name" id="userName">Học viên</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Đăng xuất</button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ================= DASHBOARD ================= -->
+    <section class="section active" id="section-dashboard">
+      <div class="hero">
+        <div class="hero-text">
+          <p class="hero-greet" id="heroGreet">Chào mừng trở lại 👋</p>
+          <h1>Chinh phục tiếng Anh<br /><span class="grad">mỗi ngày một chút</span></h1>
+          <p class="hero-desc">
+            Luyện từ vựng, flashcard, trắc nghiệm và kỹ năng nghe — tất cả trong một nơi.
+            Bắt đầu hành trình của bạn ngay hôm nay!
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" data-goto="flashcard">Bắt đầu học 🚀</button>
+            <button class="btn btn-outline" data-goto="quiz">Làm bài kiểm tra</button>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="floating-card c1">📚 <b>Từ vựng</b><small>1.200+ từ</small></div>
+          <div class="floating-card c2">🎧 <b>Nghe</b><small>600 câu</small></div>
+          <div class="floating-card c3">🏆 <b>Điểm</b><small id="heroScore">0</small></div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Tiến độ của bạn</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-ico">📖</div>
+          <div class="stat-value" id="statLearned">0</div>
+          <div class="stat-label">Từ đã học</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ico">⭐</div>
+          <div class="stat-value" id="statPoints">0</div>
+          <div class="stat-label">Điểm tích lũy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ico">🎯</div>
+          <div class="stat-value" id="statAccuracy">0%</div>
+          <div class="stat-label">Độ chính xác</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ico">🔥</div>
+          <div class="stat-value" id="statStreak">1</div>
+          <div class="stat-label">Ngày liên tiếp</div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Chủ đề nổi bật</h2>
+      <div class="topic-grid" id="topicGrid"></div>
+    </section>
+
+    <!-- ================= VOCABULARY ================= -->
+    <section class="section" id="section-vocabulary">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">📖 Từ vựng theo chủ đề</h2>
+          <p class="section-sub">Tra cứu và nghe phát âm chuẩn.</p>
+        </div>
+        <input type="search" id="vocabSearch" class="input search-input" placeholder="Tìm từ tiếng Anh..." />
+      </div>
+      <div class="chips" id="vocabChips"></div>
+      <div class="vocab-grid" id="vocabGrid"></div>
+    </section>
+
+    <!-- ================= DICTIONARY LOOKUP ================= -->
+    <section class="section" id="section-dictionary">
+      <h2 class="section-title">🔎 Tra cứu từ vựng</h2>
+      <p class="section-sub">Tìm nhanh từ tiếng Anh hoặc nghĩa tiếng Việt trong kho từ vựng của ứng dụng.</p>
+
+      <form class="dictionary-search" id="dictionarySearchForm" role="search">
+        <label class="sr-only" for="dictionarySearchInput">Từ tiếng Anh hoặc nghĩa tiếng Việt</label>
+        <input class="input" id="dictionarySearchInput" type="search"
+          placeholder="Nhập từ tiếng Anh hoặc nghĩa tiếng Việt..." autocomplete="off" />
+        <button class="btn btn-primary" type="submit">Tra từ</button>
+      </form>
+      <p class="dictionary-count" id="dictionaryCount" role="status" aria-live="polite">
+        Có thể tra từ, nghĩa tiếng Việt, phiên âm và ví dụ.
+      </p>
+
+      <div class="dictionary-layout">
+        <div>
+          <div class="dictionary-results" id="dictionaryResults" aria-label="Kết quả tra cứu"></div>
+          <p class="dictionary-empty" id="dictionaryEmpty">Nhập từ cần tra để xem kết quả.</p>
+        </div>
+        <aside class="dictionary-detail" id="dictionaryDetail" aria-live="polite">
+          <p class="dictionary-detail-placeholder">Chọn một kết quả để xem nghĩa, phiên âm, ví dụ và chủ đề.</p>
+        </aside>
+      </div>
+
+      <div class="dictionary-history-wrap">
+        <h3 class="dictionary-history-title">🕘 Tra cứu gần đây</h3>
+        <div class="dictionary-history" id="dictionaryHistory"></div>
+      </div>
+    </section>
+
+    <!-- ================= FLASHCARD ================= -->
+    <section class="section" id="section-flashcard">
+      <h2 class="section-title">🃏 Flashcard</h2>
+      <p class="section-sub">Nhấn vào thẻ để lật xem nghĩa. Đánh dấu từ đã nhớ để cộng điểm.</p>
+
+      <div class="flashcard-wrap">
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-inner">
+            <div class="flashcard-face flashcard-front">
+              <span class="fc-tag" id="fcTag">Chủ đề</span>
+              <h3 id="fcWord">Word</h3>
+              <p class="fc-ipa" id="fcIpa">/wɜːd/</p>
+              <span class="fc-hint">Nhấn để xem nghĩa 👆</span>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <span class="fc-tag">Nghĩa</span>
+              <h3 id="fcMeaning">Meaning</h3>
+              <p class="fc-example" id="fcExample"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc-controls">
+        <button class="btn btn-ghost" id="fcPrev">← Trước</button>
+        <button class="btn btn-outline" id="fcSpeak">🔊 Nghe</button>
+        <button class="btn btn-success" id="fcKnown">✓ Đã nhớ (+10)</button>
+        <button class="btn btn-ghost" id="fcNext">Sau →</button>
+      </div>
+      <p class="fc-counter"><span id="fcIndex">1</span> / <span id="fcTotal">1</span></p>
+    </section>
+
+    <!-- ================= QUIZ ================= -->
+    <section class="section" id="section-quiz">
+      <h2 class="section-title">🎯 Trắc nghiệm</h2>
+      <p class="section-sub">Chọn đáp án đúng cho mỗi câu hỏi.</p>
+
+      <div class="quiz-card" id="quizCard">
+        <div class="quiz-top">
+          <span class="quiz-progress">Câu <b id="qNumber">1</b>/<b id="qTotal">5</b></span>
+          <span class="quiz-score">Điểm: <b id="qScore">0</b></span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="qProgress"></div></div>
+        <h3 class="quiz-question" id="qQuestion">Câu hỏi?</h3>
+        <div class="quiz-options" id="qOptions"></div>
+        <div class="quiz-feedback" id="qFeedback"></div>
+        <button class="btn btn-primary" id="qNext" disabled>Tiếp theo →</button>
+      </div>
+
+      <div class="quiz-result hidden" id="quizResult">
+        <div class="result-emoji" id="resultEmoji">🎉</div>
+        <h3 id="resultTitle">Hoàn thành!</h3>
+        <p id="resultText"></p>
+        <button class="btn btn-primary" id="quizRestart">Làm lại 🔁</button>
+      </div>
+    </section>
+
+    <!-- ================= EXAM PREPARATION ================= -->
+    <section class="section" id="section-exam-prep">
+      <h2 class="section-title">🎓 Luyện thi chứng chỉ</h2>
+      <p class="section-sub">Chọn kỳ thi và kỹ năng muốn ôn. Đây là bài luyện tham khảo, không phải đề thi chính thức.</p>
+
+      <div class="exam-tabs" id="examTabs" role="tablist" aria-label="Chọn kỳ thi"></div>
+      <div class="exam-overview" id="examOverview"></div>
+      <h3 class="exam-skills-heading" id="examSkillsHeading">Chọn kỹ năng muốn luyện</h3>
+      <div class="exam-skills" id="examSkills"></div>
+
+      <div class="exam-activity hidden" id="examActivity">
+        <button class="btn btn-ghost btn-sm" id="examBackBtn" type="button">← Chọn kỹ năng khác</button>
+        <div class="exam-activity-heading">
+          <div>
+            <p class="exam-activity-label" id="examActivityLabel"></p>
+            <h3 id="examActivityTitle"></h3>
+          </div>
+          <span class="exam-activity-counter" id="examActivityCounter"></span>
+        </div>
+
+        <div class="exam-objective hidden" id="examObjective">
+          <div class="exam-passage hidden" id="examPassage"></div>
+          <div class="exam-audio-wrap hidden" id="examAudioWrap">
+            <p>Nghe đoạn hội thoại / bài nói rồi trả lời câu hỏi.</p>
+            <button class="btn btn-outline btn-sm" id="examAudioPlay" type="button">🔊 Nghe lại</button>
+          </div>
+          <h4 class="exam-question" id="examQuestion"></h4>
+          <div class="quiz-options" id="examOptions"></div>
+          <div class="exam-explanation hidden" id="examExplanation"></div>
+          <button class="btn btn-primary" id="examNextBtn" type="button" disabled>Câu tiếp theo →</button>
+        </div>
+
+        <div class="exam-production hidden" id="examProduction">
+          <div class="exam-prompt" id="examPrompt"></div>
+          <label class="exam-answer-label" id="examAnswerLabel" for="examAnswer"></label>
+          <textarea class="input exam-answer" id="examAnswer" rows="7" placeholder="Viết câu trả lời của bạn tại đây..."></textarea>
+          <div class="exam-word-count" id="examWordCount" aria-live="polite"></div>
+          <fieldset class="exam-checklist">
+            <legend id="examChecklistTitle">Tự đánh giá câu trả lời</legend>
+            <div id="examChecklistItems"></div>
+          </fieldset>
+          <button class="btn btn-primary" id="examSubmitProduction" type="button" disabled>Hoàn thành tự đánh giá</button>
+          <div class="exam-production-feedback hidden" id="examProductionFeedback" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="exam-result hidden" id="examResult">
+          <span class="exam-result-icon" id="examResultIcon">🎉</span>
+          <h4 id="examResultTitle"></h4>
+          <p id="examResultText"></p>
+          <button class="btn btn-primary" id="examPracticeAgain" type="button">Luyện lại kỹ năng này</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FRIEND CHALLENGE ================= -->
+    <section class="section" id="section-duel">
+      <h2 class="section-title">⚔️ Thi đấu cùng bạn bè</h2>
+      <p class="section-sub">Tạo thử thách, gửi link cho bạn và so sánh điểm sau khi cả hai hoàn thành.</p>
+
+      <div class="duel-card" id="duelLobby">
+        <div class="duel-intro">
+          <span class="duel-icon">🏁</span>
+          <div>
+            <h3>Ai sẽ đạt điểm cao hơn?</h3>
+            <p>Mỗi thử thách có 8 câu giống nhau. Gửi link thử thách cho bạn, sau đó nhập link kết quả của nhau để xem bảng xếp hạng.</p>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="createDuelBtn">Tạo thử thách mới</button>
+
+        <div class="duel-invite hidden" id="duelInvitePanel">
+          <h3 id="duelTitle">Thử thách của bạn</h3>
+          <p id="duelDescription"></p>
+          <label class="duel-label" for="duelInviteLink">Link thử thách</label>
+          <div class="duel-link-row">
+            <input class="input" id="duelInviteLink" type="text" readonly />
+            <button class="btn btn-outline" id="copyDuelInvite" type="button">Sao chép link</button>
+          </div>
+          <button class="btn btn-primary" id="startDuelBtn" type="button">Bắt đầu thi đấu</button>
+        </div>
+
+        <form class="duel-import" id="duelImportForm">
+          <label class="duel-label" for="duelImportInput">Nhập link thử thách hoặc link kết quả của bạn bè</label>
+          <div class="duel-link-row">
+            <input class="input" id="duelImportInput" type="text" placeholder="Dán link bạn bè gửi..." required />
+            <button class="btn btn-outline" type="submit">Mở link</button>
+          </div>
+        </form>
+        <p class="duel-status" id="duelStatus" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="quiz-card hidden" id="duelQuizCard">
+        <div class="quiz-top">
+          <span class="quiz-progress">Câu <b id="duelQNumber">1</b>/<b id="duelQTotal">8</b></span>
+          <span class="quiz-score">Điểm: <b id="duelQScore">0</b></span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="duelQProgress"></div></div>
+        <h3 class="quiz-question" id="duelQQuestion"></h3>
+        <div class="quiz-options" id="duelQOptions"></div>
+        <div class="quiz-feedback" id="duelQFeedback"></div>
+        <button class="btn btn-primary" id="duelQNext" type="button" disabled>Tiếp theo →</button>
+      </div>
+
+      <div class="quiz-result hidden" id="duelResult">
+        <div class="result-emoji" id="duelResultEmoji">🏆</div>
+        <h3 id="duelResultTitle">Hoàn thành thử thách!</h3>
+        <p id="duelResultText"></p>
+        <div class="duel-result-actions">
+          <button class="btn btn-primary" id="shareDuelResult" type="button">Chia sẻ kết quả</button>
+          <button class="btn btn-outline" id="playDuelAgain" type="button">Thi lại</button>
+        </div>
+        <div class="duel-result-share hidden" id="duelResultSharePanel">
+          <label class="duel-label" for="duelResultLink">Link kết quả của bạn</label>
+          <div class="duel-link-row">
+            <input class="input" id="duelResultLink" type="text" readonly />
+            <button class="btn btn-outline" id="copyDuelResult" type="button">Sao chép link</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="duel-leaderboard hidden" id="duelLeaderboardPanel">
+        <h3>🏆 Bảng xếp hạng thử thách</h3>
+        <ol id="duelLeaderboard"></ol>
+      </div>
+    </section>
+
+    <!-- ================= LISTENING ================= -->
+    <section class="section" id="section-listening">
+      <h2 class="section-title">🎧 Luyện nghe</h2>
+      <p class="section-sub">Nghe câu và chọn nghĩa đúng. (Dùng giọng đọc của trình duyệt)</p>
+
+      <div class="listen-card">
+        <button class="listen-play" id="listenPlay">🔊</button>
+        <p class="listen-hint">Nhấn để nghe lại câu</p>
+        <div class="listen-options" id="listenOptions"></div>
+        <div class="quiz-feedback" id="listenFeedback"></div>
+        <button class="btn btn-primary" id="listenNext">Câu tiếp theo →</button>
+        <p class="listen-count">Câu <span id="listenIndex">1</span> / <span id="listenTotal">1</span></p>
+      </div>
+    </section>
+
+    <!-- ================= NEWS / READING ================= -->
+    <section class="section" id="section-news">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">📰 Đọc báo tiếng Anh</h2>
+          <p class="section-sub">Đọc bài thật, tra từ vựng và trả lời câu hỏi đọc hiểu.</p>
+        </div>
+        <input type="search" id="newsSearch" class="input search-input" placeholder="Tìm bài báo..." />
+      </div>
+
+      <div class="chips" id="newsChips"></div>
+
+      <!-- Danh sách bài -->
+      <div class="news-grid" id="newsGrid"></div>
+
+      <!-- Trình đọc bài -->
+      <div class="reader hidden" id="newsReader">
+        <button class="btn btn-ghost btn-sm" id="newsBack">← Danh sách bài</button>
+
+        <article class="reader-article">
+          <div class="reader-meta">
+            <span class="reader-cat" id="rdCategory">Chủ đề</span>
+            <span class="reader-level" id="rdLevel">Cấp độ</span>
+          </div>
+          <h1 class="reader-title" id="rdTitle">Tiêu đề</h1>
+          <p class="reader-info">
+            <span id="rdSource">Nguồn</span> · <span id="rdDate">Ngày</span> ·
+            <span id="rdMinutes">3</span> phút đọc
+          </p>
+
+          <div class="reader-toolbar">
+            <button class="btn btn-outline btn-sm" id="rdSpeakAll">🔊 Đọc cả bài</button>
+            <button class="btn btn-ghost btn-sm" id="rdStop">⏹ Dừng</button>
+            <button class="btn btn-ghost btn-sm" id="rdToggleTrans">🇻🇳 Hiện bản dịch</button>
+          </div>
+
+          <div class="reader-body" id="rdBody"></div>
+
+          <h3 class="reader-h3">📖 Từ vựng trong bài</h3>
+          <div class="glossary" id="rdGlossary"></div>
+
+          <h3 class="reader-h3">✅ Câu hỏi đọc hiểu</h3>
+          <div class="reader-quiz" id="rdQuiz"></div>
+          <div class="quiz-feedback" id="rdFeedback"></div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 TANGLANGUAGE — Học tiếng Anh mỗi ngày. Made with ❤️</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="chatbot">
+    <section class="chatbot-panel hidden" id="chatbotPanel" aria-label="Trợ lý học tiếng Anh">
+      <header class="chatbot-header">
+        <div>
+          <strong>Trợ lý tiếng Anh</strong>
+          <span>Hỏi mình về từ vựng và ngữ pháp nhé</span>
+        </div>
+        <button class="chatbot-close" id="chatbotClose" type="button" aria-label="Thu nhỏ chatbot">−</button>
+      </header>
+      <div class="chatbot-messages" id="chatbotMessages" role="log" aria-live="polite" aria-relevant="additions">
+        <div class="chat-message bot">
+          <p>Xin chào! Mình có thể tra từ trong kho từ vựng, giải thích một số chủ điểm ngữ pháp và hướng dẫn bạn sử dụng trang học. Bạn muốn hỏi gì?</p>
+        </div>
+        <div class="chatbot-suggestions" id="chatbotSuggestions">
+          <button type="button" data-chat-prompt="Từ hello nghĩa là gì?">Từ “hello” nghĩa là gì?</button>
+          <button type="button" data-chat-prompt="Giải thích thì hiện tại đơn">Giải thích thì hiện tại đơn</button>
+          <button type="button" data-chat-prompt="Làm sao để luyện nghe?">Làm sao để luyện nghe?</button>
+        </div>
+      </div>
+      <form class="chatbot-form" id="chatbotForm">
+        <label class="sr-only" for="chatbotInput">Nhập câu hỏi</label>
+        <input id="chatbotInput" type="text" maxlength="500" autocomplete="off" placeholder="Nhập câu hỏi..." required />
+        <button type="submit" aria-label="Gửi câu hỏi">Gửi</button>
+      </form>
+    </section>
+    <button class="chatbot-launcher" id="chatbotLauncher" type="button" aria-controls="chatbotPanel" aria-expanded="false">
+      <span aria-hidden="true">💬</span> Hỏi trợ lý
+    </button>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/vocab-advanced.js"></script>
+  <script src="js/listening-data.js"></script>
+  <script src="js/news-data.js"></script>
+  <script src="js/exam-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
