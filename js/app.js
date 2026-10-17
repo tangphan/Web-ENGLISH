@@ -3,24 +3,42 @@
    Logic trang học chính: điều hướng, từ vựng, flashcard, quiz, nghe
    ============================================================ */
 
-(function () {
+(async function () {
   'use strict';
 
   /* ---------------- Kiểm tra đăng nhập ---------------- */
-  const session = JSON.parse(localStorage.getItem('em_session') || 'null');
+  const supabase = window.supabaseClient;
+  if (!supabase) {
+    console.error('Supabase client is unavailable.');
+    window.location.href = 'auth.html?auth_error=unavailable';
+    return;
+  }
+  let authData;
+  let authError;
+  try {
+    ({ data: authData, error: authError } = await supabase.auth.getSession());
+  } catch (error) {
+    console.error('Unable to restore Supabase session:', error);
+    window.location.href = 'auth.html?auth_error=unavailable';
+    return;
+  }
+  const user = authData?.session?.user;
 
-  if (!session || !session.email) {
+  if (authError || !user?.id || !user.email) {
+    if (authError) console.error('Unable to restore Supabase session:', authError);
     const duelHash = /^#duel=[A-Za-z0-9_-]+$/.test(window.location.hash)
       ? window.location.hash
       : '';
-    // Chưa đăng nhập -> chuyển tới trang đăng nhập
     window.location.href = 'auth.html' + duelHash;
     return;
   }
 
-  const USERS_KEY = 'em_users';
-  const GUEST_STATS_KEY = 'em_guest_stats';
-  const FEEDBACK_KEY = 'em_feedback';
+  const session = {
+    email: user.email,
+    name: user.user_metadata?.full_name || user.email.split('@')[0],
+    userId: user.id,
+  };
+  const USER_STATS_KEY = `em_user_stats_${user.id}`;
 
   /* ---------------- Gộp dữ liệu (cơ bản + nâng cao) ---------------- */
   // TOPICS/VOCABULARY/LISTENING đến từ data.js;
@@ -49,16 +67,6 @@
     el._t = setTimeout(() => { el.className = 'toast ' + type; }, 2400);
   }
 
-  function saveUser(patch) {
-    patch.stats = { ...(patch.stats || {}), ...(patch.stats ? patch.stats : {}) };
-    localStorage.setItem('em_session', JSON.stringify(patch));
-  }
-
-  function loadUsers() {
-    try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); }
-    catch (e) { return {}; }
-  }
-
   // Lấy tên chủ đề từ id (tìm trong cả chủ đề cơ bản và nâng cao)
   function topicName(id) {
     const t = ALL_TOPICS.find(x => x.id === id);
@@ -70,19 +78,14 @@
     return t ? t.emoji : '📚';
   }
 
-  function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-
-  function loadGuestStats() {
-    try { return JSON.parse(localStorage.getItem(GUEST_STATS_KEY) || '{}'); }
+  function loadUserStats() {
+    try { return JSON.parse(localStorage.getItem(USER_STATS_KEY) || '{}'); }
     catch (e) { return {}; }
   }
 
   /* ---------------- Thống kê người dùng ---------------- */
   function stats() {
-    const users = loadUsers();
-    const me = session.guest ? loadGuestStats() : users[session.email];
+    const me = loadUserStats();
     return {
       learned: (me && me.learned) || 0,
       points: (me && me.points) || 0,
@@ -93,23 +96,11 @@
   }
 
   function updateStats(patch) {
-    if (session.guest) {
-      const guestStats = loadGuestStats();
-      Object.keys(patch).forEach(k => {
-        guestStats[k] = patch[k] === null ? guestStats[k] : (guestStats[k] || 0) + patch[k];
-      });
-      localStorage.setItem(GUEST_STATS_KEY, JSON.stringify(guestStats));
-      renderStats();
-      return;
-    }
-
-    const users = loadUsers();
-    const me = users[session.email] || {};
+    const me = loadUserStats();
     Object.keys(patch).forEach(k => {
       me[k] = patch[k] === null ? me[k] : (me[k] || 0) + patch[k];
     });
-    users[session.email] = me;
-    saveUsers(users);
+    localStorage.setItem(USER_STATS_KEY, JSON.stringify(me));
     renderStats();
   }
 
@@ -2012,58 +2003,61 @@
   /* ============================================================
      ĐÁNH GIÁ ỨNG DỤNG
      ============================================================ */
-  function loadFeedback() {
-    try {
-      const feedback = JSON.parse(localStorage.getItem(FEEDBACK_KEY) || '[]');
-      return Array.isArray(feedback)
-        ? feedback.filter(item =>
-          item && typeof item.name === 'string' &&
-          Number.isInteger(item.rating) && item.rating >= 1 && item.rating <= 5 &&
-          typeof item.comment === 'string' && typeof item.createdAt === 'string')
-        : [];
-    } catch (e) {
-      return [];
-    }
+  async function loadFeedback() {
+    const { data, error } = await supabase
+      .from('rewiews')
+      .select('name, rating, comment')
+      .limit(100);
+    if (error) throw error;
+    return data.map(item => ({
+      name: item.name || 'Học viên',
+      rating: item.rating,
+      comment: item.comment,
+    }));
   }
 
-  function renderFeedback() {
-    const feedback = loadFeedback();
+  async function renderFeedback() {
     const summary = $('#feedbackSummary');
     const list = $('#feedbackList');
-
-    if (feedback.length === 0) {
-      summary.textContent = 'Chưa có đánh giá nào.';
-      list.innerHTML = '<p class="feedback-empty">Hãy là người đầu tiên chia sẻ cảm nhận!</p>';
-      return;
-    }
-
-    const average = feedback.reduce((total, item) => total + item.rating, 0) / feedback.length;
-    const roundedAverage = Math.round(average);
-    summary.innerHTML = `<strong>${average.toFixed(1)}</strong><span class="feedback-summary-stars" aria-label="${average.toFixed(1)} trên 5 sao">${'★'.repeat(roundedAverage)}${'☆'.repeat(5 - roundedAverage)}</span><span>${feedback.length} đánh giá</span>`;
+    summary.textContent = 'Đang tải đánh giá...';
     list.replaceChildren();
-    feedback.forEach(item => {
-      const card = document.createElement('article');
-      card.className = 'feedback-item';
 
-      const header = document.createElement('div');
-      header.className = 'feedback-item-header';
-      const name = document.createElement('strong');
-      name.textContent = item.name;
-      const date = document.createElement('time');
-      date.dateTime = item.createdAt;
-      date.textContent = new Date(item.createdAt).toLocaleDateString('vi-VN');
-      header.append(name, date);
+    try {
+      const feedback = await loadFeedback();
+      if (feedback.length === 0) {
+        summary.textContent = 'Chưa có đánh giá nào.';
+        list.innerHTML = '<p class="feedback-empty">Hãy là người đầu tiên chia sẻ cảm nhận!</p>';
+        return;
+      }
 
-      const stars = document.createElement('div');
-      stars.className = 'feedback-item-stars';
-      stars.setAttribute('aria-label', `${item.rating} trên 5 sao`);
-      stars.textContent = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+      const average = feedback.reduce((total, item) => total + item.rating, 0) / feedback.length;
+      const roundedAverage = Math.round(average);
+      summary.innerHTML = `<strong>${average.toFixed(1)}</strong><span class="feedback-summary-stars" aria-label="${average.toFixed(1)} trên 5 sao">${'★'.repeat(roundedAverage)}${'☆'.repeat(5 - roundedAverage)}</span><span>${feedback.length} đánh giá</span>`;
+      feedback.forEach(item => {
+        const card = document.createElement('article');
+        card.className = 'feedback-item';
 
-      const comment = document.createElement('p');
-      comment.textContent = item.comment;
-      card.append(header, stars, comment);
-      list.appendChild(card);
-    });
+        const header = document.createElement('div');
+        header.className = 'feedback-item-header';
+        const name = document.createElement('strong');
+        name.textContent = item.name;
+        header.append(name);
+
+        const stars = document.createElement('div');
+        stars.className = 'feedback-item-stars';
+        stars.setAttribute('aria-label', `${item.rating} trên 5 sao`);
+        stars.textContent = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+
+        const comment = document.createElement('p');
+        comment.textContent = item.comment;
+        card.append(header, stars, comment);
+        list.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Unable to load application feedback:', error);
+      summary.textContent = 'Không thể tải đánh giá lúc này.';
+      list.innerHTML = '<p class="feedback-empty">Vui lòng thử tải lại trang sau.</p>';
+    }
   }
 
   $$('#section-feedback input[name="feedbackRating"]').forEach(input => {
@@ -2079,7 +2073,7 @@
     event.currentTarget.setCustomValidity('');
   });
 
-  $('#feedbackForm').addEventListener('submit', event => {
+  $('#feedbackForm').addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
@@ -2093,28 +2087,65 @@
     }
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) return;
 
-    const feedback = loadFeedback();
-    feedback.unshift({
-      name: session.name || 'Học viên',
-      rating,
-      comment,
-      createdAt: new Date().toISOString(),
-    });
-    localStorage.setItem(FEEDBACK_KEY, JSON.stringify(feedback.slice(0, 100)));
+    const submitButton = form.querySelector('[type="submit"]');
+    submitButton.disabled = true;
+    try {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError) throw userError;
+      const reviewUser = userData.user;
+      if (!reviewUser) throw new Error('Bạn cần đăng nhập lại trước khi gửi đánh giá.');
+
+      const name = String(
+        reviewUser.user_metadata?.full_name
+        || reviewUser.user_metadata?.name
+        || reviewUser.email
+        || '',
+      ).trim();
+      if (!name) throw new Error('Không tìm thấy tên hoặc email tài khoản của bạn.');
+
+      const { error } = await supabase.from('rewiews').insert({
+        name,
+        rating,
+        comment,
+      });
+      if (error) throw error;
+    } catch (error) {
+      console.error('Unable to save application feedback:', error);
+      toast(`Không thể lưu đánh giá: ${error.message}`, 'no');
+      return;
+    } finally {
+      submitButton.disabled = false;
+    }
+
     form.reset();
     $$('.feedback-star').forEach(star => star.classList.remove('selected'));
-    renderFeedback();
+    await renderFeedback();
     toast('Cảm ơn bạn đã gửi đánh giá!', 'ok');
   });
 
   /* ============================================================
      ĐĂNG XUẤT
      ============================================================ */
-  $('#logoutBtn').addEventListener('click', () => {
+  $('#logoutBtn').addEventListener('click', async () => {
     if (confirm('Bạn chắc chắn muốn đăng xuất?')) {
-      localStorage.removeItem('em_session');
-      window.location.href = 'auth.html';
+      let result;
+      try {
+        result = await supabase.auth.signOut();
+      } catch (error) {
+        console.error('Unable to sign out from Supabase:', error);
+        toast(`Không thể đăng xuất: ${error.message}`, 'no');
+        return;
+      }
+      const { error } = result;
+      if (error) {
+        console.error('Unable to sign out from Supabase:', error);
+        toast(`Không thể đăng xuất: ${error.message}`, 'no');
+      }
     }
+  });
+
+  supabase.auth.onAuthStateChange(event => {
+    if (event === 'SIGNED_OUT') window.location.href = 'auth.html';
   });
 
   /* ============================================================

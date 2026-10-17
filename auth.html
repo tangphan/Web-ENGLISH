@@ -34,7 +34,7 @@
 
     <!-- RIGHT: form panel -->
     <main class="auth-panel">
-      <div class="auth-tabs">
+      <div class="auth-tabs" id="authTabs">
         <button class="auth-tab active" id="tabLogin">Đăng nhập</button>
         <button class="auth-tab" id="tabRegister">Đăng ký</button>
       </div>
@@ -61,14 +61,10 @@
         </label>
 
         <div class="auth-row">
-          <label class="check"><input type="checkbox" id="rememberMe" /> <span>Ghi nhớ đăng nhập</span></label>
-          <a href="#" class="link" id="forgotLink">Quên mật khẩu?</a>
+          <label class="check"><input type="checkbox" id="rememberMe" /> <span>Ghi nhớ email</span></label>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
-        <div class="auth-divider"><span>hoặc</span></div>
-        <button type="button" class="btn btn-guest btn-block" id="guestLoginBtn">Tiếp tục với tư cách khách</button>
-        <p class="guest-note">Tiến độ khách được lưu trên trình duyệt này.</p>
         <p class="auth-switch">Chưa có tài khoản? <a href="#" id="goRegister">Đăng ký ngay</a></p>
       </form>
 
@@ -115,11 +111,23 @@
         <button type="submit" class="btn btn-primary btn-block">Tạo tài khoản</button>
         <p class="auth-switch">Đã có tài khoản? <a href="#" id="goLogin">Đăng nhập</a></p>
       </form>
+
+      <section class="auth-state hidden" id="authState" aria-live="polite">
+        <div class="auth-state-icon" aria-hidden="true">✓</div>
+        <h3>Đã đăng nhập</h3>
+        <p class="auth-sub">Bạn đang đăng nhập bằng tài khoản Supabase:</p>
+        <p class="auth-account" id="authEmail"></p>
+        <a class="btn btn-primary btn-block" id="openAppLink" href="index.html">Vào ứng dụng</a>
+        <button type="button" class="btn btn-ghost btn-block auth-signout" id="authSignOut">Đăng xuất</button>
+      </section>
+      <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
     </main>
   </div>
 
   <div class="toast" id="toast"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/auth.js"></script>
 </body>
 
