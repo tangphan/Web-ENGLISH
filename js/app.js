@@ -54,6 +54,7 @@
     : (typeof LISTENING !== 'undefined' ? LISTENING : []));
 
   const ALL_NEWS = (typeof NEWS_ARTICLES !== 'undefined' ? NEWS_ARTICLES : []);
+  const LEARNING_AUDIENCE_KEY = `em_learning_audience_${user.id}`;
 
   /* ---------------- Tiện ích chung ---------------- */
   const $ = (sel) => document.querySelector(sel);
@@ -134,6 +135,8 @@
       a.classList.toggle('active', a.dataset.section === id));
 
     $('#navLinks').classList.remove('open');
+    $('#hamburger').setAttribute('aria-expanded', 'false');
+    $('#hamburger').setAttribute('aria-label', 'Mở menu');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (id === 'flashcard') renderFlashcard();
@@ -161,8 +164,92 @@
     btn.addEventListener('click', () => showSection(btn.dataset.goto));
   });
 
-  $('#hamburger').addEventListener('click', () =>
-    $('#navLinks').classList.toggle('open'));
+  $('#hamburger').addEventListener('click', () => {
+    const isOpen = $('#navLinks').classList.toggle('open');
+    $('#hamburger').setAttribute('aria-expanded', String(isOpen));
+    $('#hamburger').setAttribute('aria-label', isOpen ? 'Đóng menu' : 'Mở menu');
+  });
+
+  function renderLearningPath(path) {
+    const container = $('#learningPath');
+    container.replaceChildren();
+    if (!path) {
+      const placeholder = document.createElement('p');
+      placeholder.className = 'learning-path-placeholder';
+      placeholder.textContent = 'Chọn lớp hoặc nhóm học để xem mục tiêu và các chủ đề phù hợp.';
+      container.appendChild(placeholder);
+      return;
+    }
+
+    const heading = document.createElement('div');
+    heading.className = 'learning-path-heading';
+    const title = document.createElement('h3');
+    title.textContent = `Lộ trình ${path.id}`;
+    const level = document.createElement('span');
+    level.className = 'learning-path-level';
+    level.textContent = path.level;
+    heading.append(title, level);
+
+    const goal = document.createElement('p');
+    goal.className = 'learning-path-goal';
+    goal.textContent = path.goal;
+
+    const topicList = document.createElement('div');
+    topicList.className = 'learning-path-topics';
+    const topicHeading = document.createElement('p');
+    topicHeading.className = 'learning-path-label';
+    topicHeading.textContent = 'Chủ đề học';
+    topicList.appendChild(topicHeading);
+
+    path.topics.forEach(topicId => {
+      const topic = ALL_TOPICS.find(item => item.id === topicId);
+      if (!topic) return;
+      const count = ALL_VOCAB.filter(item => item.topic === topicId).length;
+      const topicButton = document.createElement('button');
+      topicButton.className = 'learning-topic';
+      topicButton.type = 'button';
+      const topicName = document.createElement('span');
+      topicName.className = 'learning-topic-name';
+      topicName.textContent = `${topic.emoji} ${topic.name}`;
+      const topicCount = document.createElement('span');
+      topicCount.className = 'learning-topic-count';
+      topicCount.textContent = `${count} từ`;
+      topicButton.append(topicName, topicCount);
+      topicButton.addEventListener('click', () => {
+        currentTopic = topicId;
+        searchTerm = '';
+        $('#vocabSearch').value = '';
+        renderVocabChips();
+        renderVocab();
+        showSection('vocabulary');
+      });
+      topicList.appendChild(topicButton);
+    });
+
+    container.append(heading, goal, topicList);
+  }
+
+  $$('.audience-link').forEach(button => {
+    button.addEventListener('click', () => {
+      const path = LEARNING_PATHS.find(item => item.id === button.dataset.audience);
+      if (!path) return;
+      $$('.audience-link').forEach(option => {
+        const isSelected = option.dataset.audience === path.id;
+        option.classList.toggle('active', isSelected);
+        option.setAttribute('aria-pressed', String(isSelected));
+      });
+      $('#audienceStatus').textContent = `Đang chọn: ${path.id}`;
+      localStorage.setItem(LEARNING_AUDIENCE_KEY, path.id);
+      renderLearningPath(path);
+    });
+  });
+
+  const savedAudience = localStorage.getItem(LEARNING_AUDIENCE_KEY);
+  if (savedAudience) {
+    const savedButton = [...$$('.audience-link')]
+      .find(button => button.dataset.audience === savedAudience);
+    if (savedButton) savedButton.click();
+  }
 
   /* ============================================================
      DASHBOARD — chủ đề

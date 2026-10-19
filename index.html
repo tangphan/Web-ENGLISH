@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TANGLANGUAGE - Học Tiếng Anh Online</title>
+  <link rel="icon" type="image/svg+xml" href="img/brand-mark.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +16,7 @@
   <header class="navbar" id="navbar">
     <div class="nav-inner">
       <a href="#" class="logo">
-        <span class="logo-icon">🌐</span>
+        <span class="logo-icon"><img src="img/brand-mark.svg" alt="" /></span>
         <span class="logo-text">TANG<em>LANGUAGE</em></span>
       </a>
 
@@ -40,12 +41,53 @@
           <span class="user-name" id="userName">Học viên</span>
         </div>
         <button class="btn btn-ghost btn-sm" id="logoutBtn">Đăng xuất</button>
-        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+        <button class="hamburger" id="hamburger" aria-label="Mở menu" aria-expanded="false" aria-controls="navLinks">☰</button>
       </div>
     </div>
   </header>
 
-  <main class="container">
+  <div class="learning-layout">
+    <aside class="learning-sidebar" aria-label="Chọn đối tượng học">
+      <div class="sidebar-heading">
+        <span class="sidebar-kicker">LỘ TRÌNH HỌC</span>
+        <h2>Chọn cấp độ</h2>
+        <p id="audienceStatus" aria-live="polite">Chọn nhóm phù hợp với bạn.</p>
+      </div>
+      <div class="audience-group">
+        <h3>Dành cho học sinh</h3>
+        <nav class="audience-grid" aria-label="Chọn lớp">
+          <button class="audience-link" type="button" data-audience="Lớp 1" aria-pressed="false">Lớp 1</button>
+          <button class="audience-link" type="button" data-audience="Lớp 2" aria-pressed="false">Lớp 2</button>
+          <button class="audience-link" type="button" data-audience="Lớp 3" aria-pressed="false">Lớp 3</button>
+          <button class="audience-link" type="button" data-audience="Lớp 4" aria-pressed="false">Lớp 4</button>
+          <button class="audience-link" type="button" data-audience="Lớp 5" aria-pressed="false">Lớp 5</button>
+          <button class="audience-link" type="button" data-audience="Lớp 6" aria-pressed="false">Lớp 6</button>
+          <button class="audience-link" type="button" data-audience="Lớp 7" aria-pressed="false">Lớp 7</button>
+          <button class="audience-link" type="button" data-audience="Lớp 8" aria-pressed="false">Lớp 8</button>
+          <button class="audience-link" type="button" data-audience="Lớp 9" aria-pressed="false">Lớp 9</button>
+          <button class="audience-link" type="button" data-audience="Lớp 10" aria-pressed="false">Lớp 10</button>
+          <button class="audience-link" type="button" data-audience="Lớp 11" aria-pressed="false">Lớp 11</button>
+          <button class="audience-link" type="button" data-audience="Lớp 12" aria-pressed="false">Lớp 12</button>
+        </nav>
+      </div>
+      <div class="audience-group audience-group-other">
+        <h3>Học tập &amp; công việc</h3>
+        <nav class="audience-options" aria-label="Đối tượng khác">
+          <button class="audience-link audience-link-wide" type="button" data-audience="Sinh viên" aria-pressed="false">
+            <span class="audience-option-icon" aria-hidden="true">✳</span>Sinh viên
+          </button>
+          <button class="audience-link audience-link-wide" type="button" data-audience="Người đi làm" aria-pressed="false">
+            <span class="audience-option-icon" aria-hidden="true">↗</span>Người đi làm
+          </button>
+        </nav>
+      </div>
+      <section class="learning-path" id="learningPath" aria-live="polite" aria-label="Nội dung lộ trình">
+        <p class="learning-path-placeholder">Chọn lớp hoặc nhóm học để xem mục tiêu và các chủ đề phù hợp.</p>
+      </section>
+      <p class="sidebar-note">Các chủ đề liên kết trực tiếp tới kho từ vựng hiện có.</p>
+    </aside>
+
+    <main class="container">
 
     <!-- ================= DASHBOARD ================= -->
     <section class="section active" id="section-dashboard">
@@ -506,7 +548,8 @@
       </div>
     </section>
 
-  </main>
+    </main>
+  </div>
 
   <footer class="footer">
     <p>© 2026 TANGLANGUAGE — Học tiếng Anh mỗi ngày. Made with ❤️</p>

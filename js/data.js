@@ -12,6 +12,23 @@ const TOPICS = [
   { id: 'nature', name: 'Thiên nhiên',         emoji: '🌿' },
 ];
 
+const LEARNING_PATHS = [
+  { id: 'Lớp 1', level: 'Làm quen', goal: 'Làm quen với từ vựng và mẫu câu tiếng Anh gần gũi.', topics: ['daily', 'food', 'nature'] },
+  { id: 'Lớp 2', level: 'Cơ bản', goal: 'Mở rộng vốn từ về trường lớp, đồ ăn và giao tiếp.', topics: ['school', 'food', 'daily'] },
+  { id: 'Lớp 3', level: 'Cơ bản', goal: 'Luyện câu ngắn về cuộc sống, thiên nhiên và sở thích.', topics: ['daily', 'nature', 'food'] },
+  { id: 'Lớp 4', level: 'Sơ cấp', goal: 'Tập mô tả sự vật, trường học và những chuyến đi.', topics: ['school', 'nature', 'travel'] },
+  { id: 'Lớp 5', level: 'Sơ cấp', goal: 'Củng cố giao tiếp và từ vựng chủ đề học tập, du lịch.', topics: ['daily', 'school', 'travel'] },
+  { id: 'Lớp 6', level: 'Nền tảng', goal: 'Ôn từ vựng căn bản, trường học và môi trường xung quanh.', topics: ['school', 'daily', 'nature'] },
+  { id: 'Lớp 7', level: 'Nền tảng', goal: 'Phát triển giao tiếp theo các chủ đề quen thuộc.', topics: ['daily', 'food', 'travel'] },
+  { id: 'Lớp 8', level: 'Trung cấp', goal: 'Mở rộng vốn từ học đường, thiên nhiên và du lịch.', topics: ['nature', 'travel', 'school'] },
+  { id: 'Lớp 9', level: 'Ôn tập', goal: 'Ôn tập từ vựng phổ thông và chuẩn bị cho các kỳ thi.', topics: ['school', 'travel', 'nature'] },
+  { id: 'Lớp 10', level: 'Trung cấp', goal: 'Củng cố nền tảng học thuật và giao tiếp trong đời sống.', topics: ['school', 'daily', 'science'] },
+  { id: 'Lớp 11', level: 'Nâng cao', goal: 'Mở rộng từ vựng học thuật, khoa học và nghề nghiệp.', topics: ['science', 'environment', 'work'] },
+  { id: 'Lớp 12', level: 'Ôn thi', goal: 'Ôn tập từ vựng học thuật, xã hội và định hướng tương lai.', topics: ['education', 'society', 'business'] },
+  { id: 'Sinh viên', level: 'Học thuật', goal: 'Phát triển tiếng Anh cho học tập, công nghệ và giao tiếp.', topics: ['education', 'tech', 'communication'] },
+  { id: 'Người đi làm', level: 'Ứng dụng', goal: 'Thực hành tiếng Anh công sở, kinh doanh và giao tiếp.', topics: ['work', 'business', 'communication'] },
+];
+
 const VOCABULARY = [
   // ---- Giao tiếp hằng ngày ----
   { topic: 'daily',  word: 'Hello',    ipa: '/həˈloʊ/',     mean: 'Xin chào',        ex: 'Hello, how are you today?' },
