@@ -104,10 +104,20 @@
             <button class="btn btn-outline" data-goto="quiz">Làm bài kiểm tra</button>
           </div>
         </div>
-        <div class="hero-art">
-          <div class="floating-card c1">📚 <b>Từ vựng</b><small>1.200+ từ</small></div>
-          <div class="floating-card c2">🎧 <b>Nghe</b><small>600 câu</small></div>
-          <div class="floating-card c3">🏆 <b>Điểm</b><small id="heroScore">0</small></div>
+        <div class="hero-art" role="group" aria-label="Minh họa các hoạt động học tiếng Anh">
+          <div class="hero-image-card hero-image-main">
+            <img src="img/learning-study.svg" alt="Học viên đang học tiếng Anh tại bàn" />
+            <span class="hero-image-caption">Học mỗi ngày</span>
+          </div>
+          <div class="hero-image-card hero-image-books">
+            <img src="img/learning-books.svg" alt="Sách và từ vựng tiếng Anh" />
+          </div>
+          <div class="hero-image-card hero-image-listen">
+            <img src="img/learning-listen.svg" alt="Tai nghe và sóng âm luyện nghe" />
+          </div>
+          <div class="hero-art-badge hero-art-badge-vocab"><span aria-hidden="true">📚</span><b>1.200+ từ vựng</b></div>
+          <div class="hero-art-badge hero-art-badge-listening"><span aria-hidden="true">🎧</span><b>600 câu nghe</b></div>
+          <div class="hero-art-badge hero-art-badge-score"><span aria-hidden="true">🏆</span><b>Điểm <span id="heroScore">0</span></b></div>
         </div>
       </div>
 
@@ -549,6 +559,39 @@
     </section>
 
     </main>
+
+    <aside class="language-sidebar" aria-label="Các ngôn ngữ khác">
+      <div class="language-sidebar-heading">
+        <span class="language-sidebar-kicker">NGÔN NGỮ KHÁC</span>
+        <h2>Khám phá thêm</h2>
+        <p>Chọn ngôn ngữ bạn muốn tìm hiểu.</p>
+      </div>
+      <nav class="language-menu" aria-label="Chọn ngôn ngữ">
+        <button class="language-menu-item" type="button" data-language="Tiếng Trung" aria-pressed="false">
+          <span class="language-menu-code" aria-hidden="true">中</span>
+          <span>Tiếng Trung</span>
+          <span class="language-menu-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="language-menu-item" type="button" data-language="Tiếng Đức" aria-pressed="false">
+          <span class="language-menu-code" aria-hidden="true">DE</span>
+          <span>Tiếng Đức</span>
+          <span class="language-menu-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="language-menu-item" type="button" data-language="Tiếng Hàn" aria-pressed="false">
+          <span class="language-menu-code" aria-hidden="true">한</span>
+          <span>Tiếng Hàn</span>
+          <span class="language-menu-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="language-menu-item" type="button" data-language="Tiếng Nga" aria-pressed="false">
+          <span class="language-menu-code" aria-hidden="true">РУ</span>
+          <span>Tiếng Nga</span>
+          <span class="language-menu-arrow" aria-hidden="true">›</span>
+        </button>
+      </nav>
+      <p class="language-sidebar-status" id="languageStatus" aria-live="polite">
+        Các khóa học ngôn ngữ khác đang được phát triển.
+      </p>
+    </aside>
   </div>
 
   <footer class="footer">

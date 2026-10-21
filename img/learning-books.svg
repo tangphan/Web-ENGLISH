@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 220" fill="none">
+  <defs>
+    <linearGradient id="book" x1="35" y1="45" x2="198" y2="190" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFB36F"/>
+      <stop offset="1" stop-color="#F27863"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="220" rx="22" fill="#FFF1D9"/>
+  <circle cx="191" cy="43" r="17" fill="#FFD66B"/>
+  <path d="M49 164c0-9 7-16 16-16h132v23H65c-9 0-16 2-16 8v-15Z" fill="#7163E9"/>
+  <path d="M49 132c0-9 7-16 16-16h132v23H65c-9 0-16 2-16 8v-15Z" fill="#48B8B1"/>
+  <path d="M49 99c0-9 7-16 16-16h132v23H65c-9 0-16 2-16 8V99Z" fill="url(#book)"/>
+  <path d="M72 92h91M72 125h76M72 158h84" stroke="#fff" stroke-opacity=".8" stroke-width="5" stroke-linecap="round"/>
+  <path d="M43 180h158v10H43z" fill="#D1A878"/>
+  <path d="M33 86c10-4 20-4 29 2v61c-10-6-20-6-29-2V86Z" fill="#62B98B"/>
+  <path d="M47 86c-2-19 6-30 19-38M48 104c-12-17-21-20-32-17M54 93c8-16 18-22 30-22" stroke="#39986D" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="72" cy="47" r="8" fill="#F59B70"/>
+  <path d="m175 54 8 8 15-19" stroke="#7467EF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -251,6 +251,18 @@
     if (savedButton) savedButton.click();
   }
 
+  $$('.language-menu-item').forEach(button => {
+    button.addEventListener('click', () => {
+      $$('.language-menu-item').forEach(item => {
+        const isSelected = item === button;
+        item.classList.toggle('active', isSelected);
+        item.setAttribute('aria-pressed', String(isSelected));
+      });
+      $('#languageStatus').textContent =
+        `Bạn đã chọn ${button.dataset.language}. Nội dung khóa học đang được phát triển.`;
+    });
+  });
+
   /* ============================================================
      DASHBOARD — chủ đề
      ============================================================ */
